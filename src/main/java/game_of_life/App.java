@@ -6,63 +6,128 @@ package game_of_life;
 import java.util.ArrayList;
 import java.util.Random;
 
+import game_of_life.models.Cell;
 import javafx.scene.shape.Rectangle;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
-import javafx.geometry.HPos;
-import javafx.geometry.Insets;
+import javafx.application.Platform;
+import javafx.event.EventHandler;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Priority;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 public class App extends Application {
-    int colNum = 32;
-    int rowNum = 24;
+    // Amount of columns and rows
+    final static int colNum = 32;
+    final static int rowNum = 24;
+    // Cell size
     final static int SIZE = 20;
+    // Screen width
     final static int WINDOW_WIDTH = 640;
+    // Screen height
     final static int WINDOW_HEIGHT = 480;
-    private ArrayList<Rectangle> ui_bots = new ArrayList<>();
+
+    private ArrayList<ArrayList<Rectangle>> board = new ArrayList<ArrayList<Rectangle>>();
+    private Cell cells[][] = new Cell[colNum][rowNum];
 
     @Override
     public void start(Stage primaryStage) {
         GridPane grid = new GridPane();
-        Random rand = new Random();
-        Color[] colors = { Color.BLACK, Color.WHITE };
-        for (int i = 0; i < rowNum; i++) {
-            for (int j = 0; j < colNum; j++) {
-                int n = rand.nextInt(2);
-                Rectangle rectangle = new Rectangle(SIZE, SIZE, colors[n]);
-                ui_bots.add(rectangle);
-                GridPane.setRowIndex(rectangle, i);
-                GridPane.setColumnIndex(rectangle, j);
-                grid.getChildren().addAll(rectangle);
-            }
-        }
-
+        _init();
+        _initBoard(grid);
         Scene scene = new Scene(grid, WINDOW_WIDTH, WINDOW_HEIGHT);
         AnimationTimer timer = new AnimationTimer() {
             @Override
             public void handle(long now) {
-                Color[] colors = { Color.BLACK, Color.WHITE };
-                Random rand = new Random();
-                for (int i = 0; i < (rowNum * colNum); i++) {
-                    int n = rand.nextInt(2);
-                    ui_bots.get(i).setFill(colors[n]);
-                }
+                generate();
+                display();
+                System.err.println("Going...");
             }
         };
         timer.start();
+
+        primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+            @Override
+            public void handle(WindowEvent t) {
+                board = null;
+                cells = null;
+                Platform.exit();
+                System.exit(0);
+            }
+        });
         primaryStage.setTitle("Grid");
         primaryStage.setScene(scene);
         primaryStage.show();
+    }
+
+    private void _init() {
+        Random rand = new Random();
+        for (int i = 0; i < colNum; i++) {
+            for (int j = 0; j < rowNum; j++) {
+                cells[i][j] = new Cell(rand.nextInt(2));
+            }
+        }
+    }
+
+    private void _initBoard(GridPane grid) {
+        for (int i = 0; i < rowNum; i++) {
+            ArrayList<Rectangle> _board = new ArrayList<>();
+            for (int j = 0; j < colNum; j++) {
+                Rectangle rectangle = new Rectangle(SIZE, SIZE, Color.BLACK);
+                _board.add(rectangle);
+                GridPane.setRowIndex(rectangle, i);
+                GridPane.setColumnIndex(rectangle, j);
+                grid.getChildren().addAll(rectangle);
+            }
+            board.add(_board);
+        }
+    }
+
+    private void generate() {
+        Cell[][] next = new Cell[colNum][rowNum];
+
+        for (int i = 1; i < colNum - 1; i++) {
+            for (int j = 1; j < rowNum - 1; j++) {
+                Cell neighbors = new Cell(0);
+                for (int x = -1; x <= 1; x++) {
+                    for (int y = -1; y <= 1; y++) {
+                        int n = cells[i + x][j + y].getState();
+                        neighbors.setState(neighbors.getState() + n);
+                    }
+                }
+
+                neighbors.setState(neighbors.getState() - cells[i][j].getState());
+
+                // Rules of Life
+                if ((cells[i][j].getState() == 1) && (neighbors.getState() < 2))
+                    next[i][j] = new Cell(0); // Loneliness
+                else if ((cells[i][j].getState() == 1) && (neighbors.getState() > 3))
+                    next[i][j] = new Cell(0); // Overpopulation
+                else if ((cells[i][j].getState() == 0) && (neighbors.getState() == 3))
+                    next[i][j] = new Cell(1); // Reproduction
+                else
+                    next[i][j] = cells[i][j]; // Stasis
+            }
+        }
+        cells = next;
+    }
+
+    private void display() {
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                for (int i = 0; i < colNum; i++) {
+                    for (int j = 0; j < rowNum; j++) {
+                        if (cells[i][j].getState() == 1)
+                            board.get(i).get(j).setFill(Color.BLACK);// Black
+                        else
+                            board.get(i).get(j).setFill(Color.WHITE);// White
+                    }
+                }
+            }
+        });
     }
 
     public static void main(String[] args) {
