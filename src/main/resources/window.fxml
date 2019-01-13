@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+
+<fx:root type="javafx.scene.layout.Pane" xmlns:fx="http://javafx.com/fxml">
+   <Pane fx:id="mainPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="640.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+      <children>
+         <GridPane fx:id="grid" minHeight="-Infinity" minWidth="-Infinity" prefHeight="640.0" prefWidth="480.0">
+         </GridPane>
+         <Pane fx:id="controlPanel" layoutX="480.0" prefHeight="640.0" prefWidth="321.0" style="-fx-background-color: #f9f9f9;">
+            <children>
+               <VBox prefHeight="91.0" prefWidth="156.0" style="-fx-padding: 10;">
+                  <children>
+                     <Label text="Cells" />
+                     <TextField maxHeight="-Infinity" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="27.0" prefWidth="60.0" promptText="ex: 12" />
+                     <Button mnemonicParsing="false" text="Add">
+                        <VBox.margin>
+                           <Insets top="5.0" />
+                        </VBox.margin>
+                     </Button>
+                  </children>
+               </VBox>
+               <VBox layoutY="96.0" prefHeight="137.0" prefWidth="321.0" spacing="5.0">
+                  <children>
+                     <Label text="Controls" />
+                     <HBox layoutY="166.0" prefHeight="24.0" prefWidth="301.0" spacing="10.0">
+                        <children>
+                           <Button fx:id="startBtn" mnemonicParsing="false" text="Start" />
+                           <Button fx:id="pauseBtn" disable="true" mnemonicParsing="false" text="Pause" />
+                           <Button fx:id="restartBtn" disable="false" mnemonicParsing="false" text="Restart" />
+                           <Button fx:id="stopBtn" disable="true" mnemonicParsing="false" text="Stop" />
+                        </children>
+                     </HBox>
+                     <Label text="Clients connected:" />
+                     <Label fx:id="clientsLbl" text="0">
+                        <font>
+                           <Font size="32.0" />
+                        </font>
+                     </Label>
+                  </children>
+                  <padding>
+                     <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                  </padding>
+               </VBox>
+            </children>
+         </Pane>
+      </children>
+   </Pane>
+</fx:root>

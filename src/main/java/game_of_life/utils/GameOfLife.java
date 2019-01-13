@@ -1,49 +1,61 @@
 package game_of_life.utils;
 
+import game_of_life.models.Cell;
 import java.util.ArrayList;
 
-import game_of_life.models.Cell;
-
 public class GameOfLife {
+    int cols = 32;
+    int rows = 24;
 
-    public GameOfLife(ArrayList<ArrayList<Cell>> cells) {
-        cells = initList();
+    public GameOfLife() {
     }
 
-    public ArrayList<ArrayList<Cell>> generate(ArrayList<ArrayList<Cell>> cells) {
+    public GameOfLife(int cols, int rows) {
+        this.cols = cols;
+        this.rows = rows;
+    }
+
+    public ArrayList<ArrayList<Cell>> compute(ArrayList<ArrayList<Cell>> cells) {
         ArrayList<ArrayList<Cell>> next = initList();
+        for (int i = 0; i < cols; i++) {
+            for (int j = 0; j < rows; j++) {
+                Cell state = cells.get(i).get(j);
+                // Count the cell's neighbors
+                Cell neighbors = countNeighbors(cells, i, j);
 
-        for (int x = 1; x < Constants.columns - 1; x++) {
-            for (int y = 1; y < Constants.rows - 1; y++) {
-                Cell neighbors = new Cell(0);
-                // Counting neighbors
-                for (int i = -1; i <= 1; i++) {
-                    for (int j = -1; j <= 1; j++) {
-                        neighbors.addState(cells.get(x + i).get(y + j).getState());
-                    }
+                if (state.getState() == 0 && neighbors.getState() == 3) {
+                    next.get(i).get(j).setState(1);
+                } else if (state.getState() == 1 && (neighbors.getState() < 2 || neighbors.getState() > 3)) {
+                    next.get(i).get(j).setState(0);
+                } else {
+                    next.get(i).get(j).setState(state.getState());
                 }
-
-                neighbors.subState(cells.get(x).get(y).getState());
-
-                if ((cells.get(x).get(y).getState() == 1) && (neighbors.getState() < 2))
-                    next.get(x).get(y).setState(0);
-                else if ((cells.get(x).get(y).getState() == 1) && (neighbors.getState() > 3))
-                    next.get(x).get(y).setState(0);
-                else if ((cells.get(x).get(y).getState() == 0) && (neighbors.getState() == 3))
-                    next.get(x).get(y).setState(1);
-                else
-                    next.get(x).get(y).setState(cells.get(x).get(y).getState());
             }
         }
-
         return next;
     }
 
+    private Cell countNeighbors(ArrayList<ArrayList<Cell>> cells, int x, int y) {
+        Cell sum = new Cell(0);
+        for (int i = -1; i < 2; i++) {
+            for (int j = -1; j < 2; j++) {
+                int col = (x + i + cols) % cols;
+                int row = (y + j + rows) % rows;
+                sum.addState(cells.get(col).get(row));
+            }
+        }
+        sum.subState(cells.get(x).get(y));
+        return sum;
+    }
+
+    /**
+     * Generate an empty 2D ArrayList with Cell objects
+     */
     public ArrayList<ArrayList<Cell>> initList() {
         ArrayList<ArrayList<Cell>> cells = new ArrayList<ArrayList<Cell>>();
-        for (int i = 0; i < Constants.columns; i++) {
+        for (int i = 0; i < cols; i++) {
             ArrayList<Cell> newCells = new ArrayList<>();
-            for (int j = 0; j < Constants.rows; j++) {
+            for (int j = 0; j < rows; j++) {
                 newCells.add(new Cell(0));
             }
             cells.add(newCells);

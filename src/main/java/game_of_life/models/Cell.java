@@ -10,14 +10,20 @@ public class Cell implements Serializable {
         this.state = state;
     }
 
-    public int addState(int state) {
-        int s = this.state += state;
-        return s;
+    /**
+     * @param cell the cell to add
+     */
+    public int addState(Cell cell) {
+        state += cell.state;
+        return state;
     }
 
-    public int subState(int state) {
-        int s = this.state += state;
-        return s;
+    /**
+     * @param cell the cell to subtract
+     */
+    public int subState(Cell cell) {
+        state -= cell.state;
+        return state;
     }
 
     /**

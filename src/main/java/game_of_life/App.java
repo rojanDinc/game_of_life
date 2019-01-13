@@ -3,70 +3,92 @@
  */
 package game_of_life;
 
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Random;
 
 import game_of_life.models.Cell;
 import game_of_life.utils.Constants;
 import game_of_life.utils.GameOfLife;
+import game_of_life.views.AppController;
 import javafx.scene.shape.Rectangle;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 
 public class App extends Application {
-    // Screen width
-    private static final double WINDOW_WIDTH = 640;
-    // Screen height
-    private static final double WINDOW_HEIGHT = 480;
-    // Rectangle size
-    private static final double SIZE = 10;
-    // Timeout variable this is how fast the animation will run
-    private static final long TIMEOUT = 90_000_000;
 
-    private ArrayList<ArrayList<Rectangle>> rects = new ArrayList<ArrayList<Rectangle>>();
+    private int amount = 768;
+    private int cols = amount / 24;
+    private int rows = amount / 32;
     private ArrayList<ArrayList<Cell>> cells = new ArrayList<ArrayList<Cell>>();
+    private GameOfLife gol;
+    private AppController controller;
 
     @Override
-    public void start(Stage primaryStage) {
-        GridPane grid = new GridPane();
+    public void start(Stage primaryStage) throws Exception {
+        controller = new AppController(cols, rows);
+        gol = new GameOfLife();
         initCells();
-        initRects(grid);
-        Scene scene = new Scene(grid, WINDOW_WIDTH, WINDOW_HEIGHT);
-        GameOfLife gol = new GameOfLife(cells);
-
         AnimationTimer timer = new AnimationTimer() {
             private long lastUpdate = 0;
 
             @Override
             public void handle(long now) {
-                if (now - lastUpdate >= TIMEOUT) {
-                    cells = gol.generate(cells);
-                    display();
+                if (now - lastUpdate >= Constants.TIMEOUT) {
+                    cells = gol.compute(cells);
+                    controller.display(cells);
                     lastUpdate = now;
                 }
             }
         };
         timer.start();
+        controller.startBtn.setOnAction((event) -> {
+            timer.start();
+            controller.stopBtn.setDisable(false);
+            controller.startBtn.setDisable(true);
+        });
+        controller.stopBtn.setOnAction((event) -> {
+            timer.stop();
+            controller.stopBtn.setDisable(true);
+            controller.startBtn.setDisable(false);
+        });
+        controller.restartBtn.setOnAction((event) -> {
+            timer.stop();
+            cells = new ArrayList<ArrayList<Cell>>();
+            initCells();
+            controller.stopBtn.setDisable(false);
+            controller.startBtn.setDisable(true);
+            timer.start();
+        });
 
-        // Clean up variables on exit
+        // Clean up resources on exit
         primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
             @Override
             public void handle(WindowEvent t) {
-                rects = null;
                 cells = null;
                 Platform.exit();
                 System.exit(0);
             }
         });
         primaryStage.setTitle("Grid");
-        primaryStage.setScene(scene);
+        primaryStage.setScene(new Scene(controller));
+        // primaryStage.setResizable(false);
         primaryStage.show();
     }
 
@@ -75,46 +97,13 @@ public class App extends Application {
      */
     private void initCells() {
         Random rand = new Random();
-        for (int i = 0; i < Constants.columns; i++) {
+        for (int i = 0; i < cols; i++) {
             ArrayList<Cell> newCells = new ArrayList<>();
-            for (int j = 0; j < Constants.rows; j++) {
-                newCells.add(new Cell(rand.nextInt(2)));
+            for (int j = 0; j < rows; j++) {
+                newCells.add(new Cell(0));
             }
             cells.add(newCells);
         }
-    }
-
-    /**
-     * Initialize the two dimensional Rectangle array which is used for representing
-     * the cells on the GUI
-     */
-    private void initRects(GridPane grid) {
-        for (int i = 0; i < Constants.columns; i++) {
-            ArrayList<Rectangle> _rects = new ArrayList<>();
-            for (int j = 0; j < Constants.rows; j++) {
-                Rectangle rectangle = new Rectangle(SIZE, SIZE, Color.YELLOW);
-                _rects.add(rectangle);
-                GridPane.setRowIndex(rectangle, i);
-                GridPane.setColumnIndex(rectangle, j);
-                grid.getChildren().addAll(rectangle);
-            }
-            rects.add(_rects);
-        }
-    }
-
-    // Update the UI
-    private void display() {
-        Platform.runLater(() -> {
-            for (int i = 0; i < Constants.columns; i++) {
-                for (int j = 0; j < Constants.rows; j++) {
-                    if ((cells.get(i).get(j).getState() == 1))
-                        rects.get(i).get(j).setFill(Color.BLACK);
-                    else
-                        rects.get(i).get(j).setFill(Color.WHITE);
-
-                }
-            }
-        });
     }
 
     public static void main(String[] args) {
