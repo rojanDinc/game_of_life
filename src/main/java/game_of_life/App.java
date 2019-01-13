@@ -75,7 +75,7 @@ public class App extends Application {
         for (int i = 0; i < rowNum; i++) {
             ArrayList<Rectangle> _board = new ArrayList<>();
             for (int j = 0; j < colNum; j++) {
-                Rectangle rectangle = new Rectangle(SIZE, SIZE, Color.BLACK);
+                Rectangle rectangle = new Rectangle(SIZE, SIZE, Color.WHITE);
                 _board.add(rectangle);
                 GridPane.setRowIndex(rectangle, i);
                 GridPane.setColumnIndex(rectangle, j);
