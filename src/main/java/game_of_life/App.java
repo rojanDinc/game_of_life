@@ -4,6 +4,7 @@
 package game_of_life;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 import game_of_life.models.Cell;
@@ -19,39 +20,47 @@ import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 
 public class App extends Application {
+    private static final int MULTIPLIER = 2;
     // Amount of columns and rows
-    final static int colNum = 32;
-    final static int rowNum = 24;
-    // Cell size
-    final static int SIZE = 20;
+    private static final int rows = 32 * MULTIPLIER; // 32
+    private static final int columns = 24 * MULTIPLIER; // 24
     // Screen width
-    final static int WINDOW_WIDTH = 640;
+    private static final double WINDOW_WIDTH = 640;
     // Screen height
-    final static int WINDOW_HEIGHT = 480;
+    private static final double WINDOW_HEIGHT = 480;
+    private static final double SIZE = 10;
+    // Timeout variable this is how fast the animation will run
+    private static final long TIMEOUT = 50_000_000;
 
-    private ArrayList<ArrayList<Rectangle>> board = new ArrayList<ArrayList<Rectangle>>();
-    private Cell cells[][] = new Cell[colNum][rowNum];
+    private ArrayList<ArrayList<Rectangle>> rects = new ArrayList<ArrayList<Rectangle>>();
+    private ArrayList<ArrayList<Cell>> cells = new ArrayList<ArrayList<Cell>>(rows);
 
     @Override
     public void start(Stage primaryStage) {
         GridPane grid = new GridPane();
         _init();
-        _initBoard(grid);
+        _initRects(grid);
         Scene scene = new Scene(grid, WINDOW_WIDTH, WINDOW_HEIGHT);
+
         AnimationTimer timer = new AnimationTimer() {
+            private long lastUpdate = 0;
+
             @Override
             public void handle(long now) {
-                generate();
-                display();
-                System.err.println("Going...");
+                if (now - lastUpdate >= TIMEOUT) {
+                    generate();
+                    display();
+                    lastUpdate = now;
+                }
             }
         };
         timer.start();
 
+        // Clean up variables on exit
         primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
             @Override
             public void handle(WindowEvent t) {
-                board = null;
+                rects = null;
                 cells = null;
                 Platform.exit();
                 System.exit(0);
@@ -62,69 +71,88 @@ public class App extends Application {
         primaryStage.show();
     }
 
+    /**
+     * Initialize the two dimensional Cell array
+     */
     private void _init() {
         Random rand = new Random();
-        for (int i = 0; i < colNum; i++) {
-            for (int j = 0; j < rowNum; j++) {
-                cells[i][j] = new Cell(rand.nextInt(2));
+        for (int i = 0; i < columns; i++) {
+            ArrayList<Cell> newCells = new ArrayList<>(rows);
+            for (int j = 0; j < rows; j++) {
+                newCells.add(new Cell(rand.nextInt(2)));
             }
+            cells.add(newCells);
         }
     }
 
-    private void _initBoard(GridPane grid) {
-        for (int i = 0; i < rowNum; i++) {
-            ArrayList<Rectangle> _board = new ArrayList<>();
-            for (int j = 0; j < colNum; j++) {
-                Rectangle rectangle = new Rectangle(SIZE, SIZE, Color.WHITE);
-                _board.add(rectangle);
+    /**
+     * Initialize the two dimensional Rectangle array which is used for representing
+     * the cells on the GUI
+     */
+    private void _initRects(GridPane grid) {
+        for (int i = 0; i < columns; i++) {
+            ArrayList<Rectangle> _rects = new ArrayList<>();
+            for (int j = 0; j < rows; j++) {
+                Rectangle rectangle = new Rectangle(SIZE, SIZE, Color.YELLOW);
+                _rects.add(rectangle);
                 GridPane.setRowIndex(rectangle, i);
                 GridPane.setColumnIndex(rectangle, j);
                 grid.getChildren().addAll(rectangle);
             }
-            board.add(_board);
+            rects.add(_rects);
         }
     }
 
-    private void generate() {
-        Cell[][] next = new Cell[colNum][rowNum];
+    private ArrayList<ArrayList<Cell>> initList() {
+        ArrayList<ArrayList<Cell>> cells = new ArrayList<ArrayList<Cell>>();
+        for (int i = 0; i < columns; i++) {
+            ArrayList<Cell> newCells = new ArrayList<>();
+            for (int j = 0; j < rows; j++) {
+                newCells.add(new Cell(0));
+            }
+            cells.add(newCells);
+        }
 
-        for (int i = 1; i < colNum - 1; i++) {
-            for (int j = 1; j < rowNum - 1; j++) {
+        return cells;
+    }
+
+    private void generate() {
+        ArrayList<ArrayList<Cell>> next = initList();
+
+        for (int x = 1; x < columns - 1; x++) {
+            for (int y = 1; y < rows - 1; y++) {
                 Cell neighbors = new Cell(0);
-                for (int x = -1; x <= 1; x++) {
-                    for (int y = -1; y <= 1; y++) {
-                        int n = cells[i + x][j + y].getState();
-                        neighbors.setState(neighbors.getState() + n);
+                for (int i = -1; i <= 1; i++) {
+                    for (int j = -1; j <= 1; j++) {
+                        neighbors.addState(cells.get(x + i).get(y + j).getState());
                     }
                 }
 
-                neighbors.setState(neighbors.getState() - cells[i][j].getState());
+                neighbors.subState(cells.get(x).get(y).getState());
 
-                // Rules of Life
-                if ((cells[i][j].getState() == 1) && (neighbors.getState() < 2))
-                    next[i][j] = new Cell(0); // Loneliness
-                else if ((cells[i][j].getState() == 1) && (neighbors.getState() > 3))
-                    next[i][j] = new Cell(0); // Overpopulation
-                else if ((cells[i][j].getState() == 0) && (neighbors.getState() == 3))
-                    next[i][j] = new Cell(1); // Reproduction
+                if ((cells.get(x).get(y).getState() == 1) && (neighbors.getState() < 2))
+                    next.get(x).get(y).setState(0);
+                else if ((cells.get(x).get(y).getState() == 1) && (neighbors.getState() > 3))
+                    next.get(x).get(y).setState(0);
+                else if ((cells.get(x).get(y).getState() == 0) && (neighbors.getState() == 3))
+                    next.get(x).get(y).setState(1);
                 else
-                    next[i][j] = cells[i][j]; // Stasis
+                    next.get(x).get(y).setState(cells.get(x).get(y).getState());
             }
         }
+
         cells = next;
     }
 
     private void display() {
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-                for (int i = 0; i < colNum; i++) {
-                    for (int j = 0; j < rowNum; j++) {
-                        if (cells[i][j].getState() == 1)
-                            board.get(i).get(j).setFill(Color.BLACK);// Black
-                        else
-                            board.get(i).get(j).setFill(Color.WHITE);// White
-                    }
+        Platform.runLater(() -> {
+            for (int i = 0; i < columns; i++) {
+                for (int j = 0; j < rows; j++) {
+                    if ((cells.get(i).get(j).getState() == 1))
+                        rects.get(i).get(j).setFill(Color.BLACK);
+                    else
+                        rects.get(i).get(j).setFill(Color.WHITE);
+
                 }
             }
         });
