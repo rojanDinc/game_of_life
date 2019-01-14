@@ -1,10 +1,8 @@
 package game_of_life.views;
 
 import java.util.ArrayList;
-import java.util.Random;
 
 import game_of_life.models.Cell;
-import game_of_life.utils.Constants;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;

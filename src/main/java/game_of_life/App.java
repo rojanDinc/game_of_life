@@ -3,7 +3,6 @@
  */
 package game_of_life;
 
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -11,23 +10,11 @@ import game_of_life.models.Cell;
 import game_of_life.utils.Constants;
 import game_of_life.utils.GameOfLife;
 import game_of_life.views.AppController;
-import javafx.scene.shape.Rectangle;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.application.Platform;
-import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 
@@ -100,7 +87,7 @@ public class App extends Application {
         for (int i = 0; i < cols; i++) {
             ArrayList<Cell> newCells = new ArrayList<>();
             for (int j = 0; j < rows; j++) {
-                newCells.add(new Cell(0));
+                newCells.add(new Cell(rand.nextInt(2)));
             }
             cells.add(newCells);
         }
