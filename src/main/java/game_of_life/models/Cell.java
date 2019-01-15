@@ -4,10 +4,19 @@ import java.io.Serializable;
 
 public class Cell implements Serializable {
     final static long serialVersionUID = 327984L;
-    int state;
+    private int state;
 
     public Cell(int state) {
         this.state = state;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof Cell) {
+            Cell c = (Cell) obj;
+            return this.state == c.getState();
+        }
+        return false;
     }
 
     /**

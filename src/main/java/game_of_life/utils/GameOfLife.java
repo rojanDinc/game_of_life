@@ -23,13 +23,36 @@ public class GameOfLife {
                 // Count the cell's neighbors
                 Cell neighbors = countNeighbors(cells, i, j);
 
-                if (state.getState() == 0 && neighbors.getState() == 3) {
-                    next.get(i).get(j).setState(1);
-                } else if (state.getState() == 1 && (neighbors.getState() < 2 || neighbors.getState() > 3)) {
+                // Rules
+                /**
+                 * 1. Any live cell with fewer than two live neighbors dies, as if by
+                 * underpopulation.
+                 */
+                if (state.getState() == 1 && neighbors.getState() < 2) {
                     next.get(i).get(j).setState(0);
-                } else {
-                    next.get(i).get(j).setState(state.getState());
                 }
+                /**
+                 * 2. Any live cell with two or three live neighbors lives on to the next
+                 * generation.
+                 */
+                else if (state.getState() == 1 && (neighbors.getState() == 2 || neighbors.getState() == 3)) {
+                    next.get(i).get(j).setState(1);
+                }
+                /**
+                 * 3. Any live cell with more than three live neighbors dies, as if by
+                 * overpopulation.
+                 */
+                else if (state.getState() == 1 && neighbors.getState() > 3) {
+                    next.get(i).get(j).setState(0);
+                }
+                /**
+                 * 4. Any dead cell with exactly three live neighbors becomes a live cell, as if
+                 * by reproduction.
+                 */
+                else if (state.getState() == 0 && neighbors.getState() == 3) {
+                    next.get(i).get(j).setState(1);
+                }
+
             }
         }
         return next;

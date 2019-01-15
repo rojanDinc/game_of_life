@@ -47,15 +47,31 @@ public class AppController extends Pane {
         initRects();
     }
 
+    public AppController(int cols, int rows, int size) {
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/window.fxml"));
+        fxmlLoader.setRoot(this);
+        fxmlLoader.setController(this);
+
+        try {
+            fxmlLoader.load();
+        } catch (Exception e) {
+            System.err.println(e);
+        }
+        this.cols = cols;
+        this.rows = rows;
+        this.size = size;
+        initRects();
+    }
+
     /**
-     * @param clientsLbl the clientsLbl to set
+     * @param clientsLbl the Label to set
      */
     public void setClientsLbl(int number) {
         this.clientsLbl.setText(Integer.toString(number));
     }
 
     /**
-     * @return the grid
+     * @return the grid object
      */
     public GridPane getGrid() {
         return grid;

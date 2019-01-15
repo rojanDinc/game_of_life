@@ -20,7 +20,6 @@ repositories {
     jcenter()
     mavenLocal()
     mavenCentral()
-
 }
 dependencies {
     // This dependency is found on compile classpath of this component and consumers.
@@ -28,6 +27,10 @@ dependencies {
     
     // Use JUnit test framework
     testImplementation 'junit:junit:4.12'
+    // https://mvnrepository.com/artifact/org.assertj/assertj-core
+    testCompile group: 'org.assertj', name: 'assertj-core', version: '3.11.1'
+
+
 }
 
 // Define the main class for the application
