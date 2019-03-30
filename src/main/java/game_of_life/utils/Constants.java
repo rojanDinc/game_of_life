@@ -1,7 +1,5 @@
 package game_of_life.utils;
 
-import java.lang.Math;
-
 public class Constants {
     // Screen width
     public static final int WINDOW_WIDTH = 480;

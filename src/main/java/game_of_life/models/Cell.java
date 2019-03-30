@@ -1,6 +1,7 @@
 package game_of_life.models;
 
 import java.io.Serializable;
+import java.util.stream.IntStream;
 
 public class Cell implements Serializable {
     final static long serialVersionUID = 327984L;
@@ -21,6 +22,7 @@ public class Cell implements Serializable {
 
     /**
      * @param cell the cell to add
+     * @return current state
      */
     public int addState(Cell cell) {
         state += cell.state;
@@ -28,7 +30,8 @@ public class Cell implements Serializable {
     }
 
     /**
-     * @param cell the cell to subtract
+     * @param cell the cell to subtract with
+     * @return current state
      */
     public int subState(Cell cell) {
         state -= cell.state;

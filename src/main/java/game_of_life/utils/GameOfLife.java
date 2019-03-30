@@ -2,14 +2,24 @@ package game_of_life.utils;
 
 import game_of_life.models.Cell;
 import java.util.ArrayList;
+import java.util.stream.IntStream;
 
 public class GameOfLife {
-    int cols = 32;
-    int rows = 24;
+    private int cols = 32;
+    private int rows = 24;
 
+    /**
+     * Empty Contstructor
+     */
     public GameOfLife() {
     }
 
+    /**
+     * Parameterized constructor
+     * 
+     * @param cols amount of columns the display is initialized with
+     * @param rows amount of rows the display is initialized with
+     */
     public GameOfLife(int cols, int rows) {
         this.cols = cols;
         this.rows = rows;
@@ -17,8 +27,8 @@ public class GameOfLife {
 
     public ArrayList<ArrayList<Cell>> compute(ArrayList<ArrayList<Cell>> cells) {
         ArrayList<ArrayList<Cell>> next = initList();
-        for (int i = 0; i < cols; i++) {
-            for (int j = 0; j < rows; j++) {
+        for (int i = 0; i < next.size(); i++) {
+            for (int j = 0; j < next.get(0).size(); j++) {
                 Cell state = cells.get(i).get(j);
                 // Count the cell's neighbors
                 Cell neighbors = countNeighbors(cells, i, j);
@@ -58,21 +68,32 @@ public class GameOfLife {
         return next;
     }
 
+    /**
+     * <p>
+     * Get the current cells position to calculate the cells neighbours and return a
+     * new cell with a new state depending on its current neighbours and replace
+     * this with the initial cell.
+     * </p>
+     * 
+     * @param cells 2D ArrayList with the current cells
+     * @param x     x position to count neighbours from
+     * @param y     y position to count neighbours from
+     * @return a new cell with a new state
+     */
     private Cell countNeighbors(ArrayList<ArrayList<Cell>> cells, int x, int y) {
-        Cell sum = new Cell(0);
-        for (int i = -1; i < 2; i++) {
-            for (int j = -1; j < 2; j++) {
-                int col = (x + i + cols) % cols;
-                int row = (y + j + rows) % rows;
-                sum.addState(cells.get(col).get(row));
-            }
-        }
-        sum.subState(cells.get(x).get(y));
-        return sum;
+        Cell c = new Cell(
+                IntStream.range(-1, 2)
+                        .map(i -> IntStream.range(-1, 2)
+                                .map(j -> cells.get((x + i + cols) % cols).get((y + j + rows) % rows).getState()).sum())
+                        .sum());
+        c.subState(cells.get(x).get(y));
+        return c;
     }
 
     /**
      * Generate an empty 2D ArrayList with Cell objects
+     * 
+     * @return the 2D ArrayList
      */
     public ArrayList<ArrayList<Cell>> initList() {
         ArrayList<ArrayList<Cell>> cells = new ArrayList<ArrayList<Cell>>();
