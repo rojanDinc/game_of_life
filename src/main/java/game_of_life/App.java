@@ -5,8 +5,11 @@ package game_of_life;
 
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import game_of_life.models.Cell;
+import game_of_life.network.Server;
 import game_of_life.utils.Constants;
 import game_of_life.utils.GameOfLife;
 import game_of_life.views.AppController;
@@ -63,6 +66,10 @@ public class App extends Application {
             controller.startBtn.setDisable(true);
             timer.start();
         });
+
+        // Network
+        final Server server = new Server();
+        new Thread(server).start();
 
         // Clean up resources on exit
         primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
