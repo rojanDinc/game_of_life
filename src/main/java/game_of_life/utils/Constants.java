@@ -9,4 +9,7 @@ public class Constants {
     public static final long TIMEOUT = 100L * 1000000L;
     // Port
     public static final int PORT = 8080;
+
+    public static final int COLS = 32;
+    public static final int ROWS = 24;
 }
