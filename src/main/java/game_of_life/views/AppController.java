@@ -3,6 +3,7 @@ package game_of_life.views;
 import java.util.ArrayList;
 
 import game_of_life.models.Cell;
+import game_of_life.utils.Constants;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -26,13 +27,11 @@ public class AppController extends Pane {
     @FXML
     public Button startBtn, pauseBtn, restartBtn, stopBtn;
 
-    int cols;
-    int rows;
     // Rectangle size
-    int size = 20;
+    static final int size = 20;
     private ArrayList<ArrayList<Rectangle>> rects = new ArrayList<ArrayList<Rectangle>>();
 
-    public AppController(int cols, int rows) {
+    public AppController() {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/window.fxml"));
         fxmlLoader.setRoot(this);
         fxmlLoader.setController(this);
@@ -42,24 +41,7 @@ public class AppController extends Pane {
         } catch (Exception e) {
             System.err.println(e);
         }
-        this.cols = cols;
-        this.rows = rows;
-        initRects();
-    }
 
-    public AppController(int cols, int rows, int size) {
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/window.fxml"));
-        fxmlLoader.setRoot(this);
-        fxmlLoader.setController(this);
-
-        try {
-            fxmlLoader.load();
-        } catch (Exception e) {
-            System.err.println(e);
-        }
-        this.cols = cols;
-        this.rows = rows;
-        this.size = size;
         initRects();
     }
 
@@ -80,8 +62,8 @@ public class AppController extends Pane {
     // Update the UI
     public void display(ArrayList<ArrayList<Cell>> cells) {
         Platform.runLater(() -> {
-            for (int i = 0; i < cols; i++) {
-                for (int j = 0; j < rows; j++) {
+            for (int i = 0; i < Constants.COLS; i++) {
+                for (int j = 0; j < Constants.ROWS; j++) {
                     if ((cells.get(i).get(j).getState() == 1)) {
                         rects.get(i).get(j).setFill(Color.BLACK);
                     } else {
@@ -97,9 +79,9 @@ public class AppController extends Pane {
      * the cells on the GUI
      */
     private void initRects() {
-        for (int i = 0; i < cols; i++) {
+        for (int i = 0; i < Constants.COLS; i++) {
             ArrayList<Rectangle> temp_rects = new ArrayList<>();
-            for (int j = 0; j < rows; j++) {
+            for (int j = 0; j < Constants.ROWS; j++) {
                 Rectangle rectangle = new Rectangle(size, size, Color.YELLOW);
                 GridPane.setRowIndex(rectangle, i);
                 GridPane.setColumnIndex(rectangle, j);
