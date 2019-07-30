@@ -3,6 +3,7 @@
  */
 package game_of_life;
 
+import java.net.ServerSocket;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.concurrent.ExecutorService;
@@ -23,16 +24,15 @@ import javafx.stage.WindowEvent;
 
 public class App extends Application {
 
-    private int amount = 768;
-    private int cols = amount / 24;
-    private int rows = amount / 32;
+    private static final int amount = 768;
     private ArrayList<ArrayList<Cell>> cells = new ArrayList<ArrayList<Cell>>();
     private GameOfLife gol;
     private AppController controller;
+    private Server server;
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        controller = new AppController(cols, rows);
+        controller = new AppController();
         gol = new GameOfLife();
         initCells();
         AnimationTimer timer = new AnimationTimer() {
@@ -40,14 +40,17 @@ public class App extends Application {
 
             @Override
             public void handle(long now) {
-                if (now - lastUpdate >= Constants.TIMEOUT) {
-                    cells = gol.compute(cells);
+                // if (now - lastUpdate >= Constants.TIMEOUT) {
+                // cells = gol.compute(cells);
+                // controller.display(cells);
+                // lastUpdate = now;
+                // }
+                if (server != null) {
+                    cells = server.calculate(cells);
                     controller.display(cells);
-                    lastUpdate = now;
                 }
             }
         };
-        timer.start();
         controller.startBtn.setOnAction((event) -> {
             timer.start();
             controller.stopBtn.setDisable(false);
@@ -68,7 +71,7 @@ public class App extends Application {
         });
 
         // Network
-        final Server server = new Server();
+        server = new Server();
         new Thread(server).start();
 
         // Clean up resources on exit
@@ -91,9 +94,9 @@ public class App extends Application {
      */
     private void initCells() {
         Random rand = new Random();
-        for (int i = 0; i < cols; i++) {
+        for (int i = 0; i < Constants.COLS; i++) {
             ArrayList<Cell> newCells = new ArrayList<>();
-            for (int j = 0; j < rows; j++) {
+            for (int j = 0; j < Constants.ROWS; j++) {
                 newCells.add(new Cell(rand.nextInt(2)));
             }
             cells.add(newCells);
