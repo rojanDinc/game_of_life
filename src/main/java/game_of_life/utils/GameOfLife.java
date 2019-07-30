@@ -4,6 +4,9 @@ import game_of_life.models.Cell;
 import java.util.ArrayList;
 import java.util.stream.IntStream;
 
+/**
+ * Game logic class
+ */
 public class GameOfLife {
     private int cols = 32;
     private int rows = 24;
