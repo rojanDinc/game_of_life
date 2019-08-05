@@ -26,6 +26,10 @@ public class ClientCalculation implements Serializable {
         return cellBatch;
     }
 
+    public void setCellBatch(ArrayList<ArrayList<Cell>> cells) {
+        this.cellBatch = cells;
+    }
+
     public int getStartCol() {
         return startCol;
     }

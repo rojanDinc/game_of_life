@@ -5,11 +5,13 @@ package game_of_life;
 
 import java.net.ServerSocket;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import game_of_life.models.Cell;
+import game_of_life.network.Client;
 import game_of_life.network.Server;
 import game_of_life.utils.Constants;
 import game_of_life.utils.GameOfLife;
@@ -45,9 +47,16 @@ public class App extends Application {
                 // controller.display(cells);
                 // lastUpdate = now;
                 // }
-                if (server != null) {
-                    cells = server.calculate(cells);
-                    controller.display(cells);
+                if (server != null && server.getClientCount() > 0) {
+                    try {
+                        controller.setClientsLbl(server.getClientCount());
+                        cells = server.calculate(cells);
+                        if (cells.get(0).get(0) != null)
+                            controller.display(cells);
+                    } catch (Exception e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    }
                 }
             }
         };
@@ -73,7 +82,13 @@ public class App extends Application {
         // Network
         server = new Server();
         new Thread(server).start();
-
+        List<Thread> clients = new ArrayList<Thread>();
+        final int noClients = 1;
+        for (int i = 0; i < noClients; i++) {
+            clients.add(new Thread(new Client()));
+        }
+        clients.forEach(c -> c.start());
+        controller.setClientsLbl(server.getClientCount());
         // Clean up resources on exit
         primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
             @Override

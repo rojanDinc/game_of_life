@@ -14,7 +14,7 @@
          </GridPane>
          <Pane fx:id="controlPanel" layoutX="480.0" prefHeight="640.0" prefWidth="321.0" style="-fx-background-color: #f9f9f9;">
             <children>
-               <VBox prefHeight="91.0" prefWidth="156.0" style="-fx-padding: 10;">
+               <!-- <VBox prefHeight="91.0" prefWidth="156.0" style="-fx-padding: 10;">
                   <children>
                      <Label text="Cells" />
                      <TextField maxHeight="-Infinity" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="27.0" prefWidth="60.0" promptText="ex: 12" />
@@ -24,8 +24,8 @@
                         </VBox.margin>
                      </Button>
                   </children>
-               </VBox>
-               <VBox layoutY="96.0" prefHeight="137.0" prefWidth="321.0" spacing="5.0">
+               </VBox> -->
+               <VBox layoutY="20.0" prefHeight="137.0" prefWidth="321.0" spacing="5.0">
                   <children>
                      <Label text="Controls" />
                      <HBox layoutY="166.0" prefHeight="24.0" prefWidth="301.0" spacing="10.0">

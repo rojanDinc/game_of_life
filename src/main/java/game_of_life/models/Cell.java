@@ -1,14 +1,16 @@
 package game_of_life.models;
 
 import java.io.Serializable;
-import java.util.stream.IntStream;
+import java.util.UUID;
 
 public class Cell implements Serializable {
     final static long serialVersionUID = 327984L;
     private int state;
+    private String id;
 
     public Cell(int state) {
         this.state = state;
+        id = UUID.randomUUID().toString();
     }
 
     @Override
@@ -50,5 +52,9 @@ public class Cell implements Serializable {
      */
     public void setState(int state) {
         this.state = state;
+    }
+
+    public String getId() {
+        return id;
     }
 }
