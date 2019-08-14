@@ -1,6 +1,7 @@
 package game_of_life.views;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 import game_of_life.models.Cell;
 import game_of_life.utils.Constants;
@@ -25,8 +26,7 @@ public class AppController extends Pane {
     @FXML
     private Label clientsLbl;
     @FXML
-    public Button startBtn, pauseBtn, restartBtn, stopBtn;
-
+    public Button startBtn, restartBtn, stopBtn, addClientBtn;
     // Rectangle size
     static final int size = 20;
     private ArrayList<ArrayList<Rectangle>> rects = new ArrayList<ArrayList<Rectangle>>();
@@ -61,11 +61,12 @@ public class AppController extends Pane {
 
     // Update the UI
     public void display(ArrayList<ArrayList<Cell>> cells) {
+        Random rand = new Random();
         Platform.runLater(() -> {
             for (int i = 0; i < Constants.COLS; i++) {
                 for (int j = 0; j < Constants.ROWS; j++) {
                     if ((cells.get(i).get(j).getState() == 1)) {
-                        rects.get(i).get(j).setFill(Color.BLACK);
+                        rects.get(i).get(j).setFill(Color.rgb(rand.nextInt(256), rand.nextInt(256), rand.nextInt(256)));
                     } else {
                         rects.get(i).get(j).setFill(Color.WHITE);
                     }
