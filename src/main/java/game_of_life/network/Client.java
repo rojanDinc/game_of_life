@@ -6,8 +6,7 @@ import java.net.InetAddress;
 import java.net.Socket;
 import java.util.ArrayList;
 
-import game_of_life.models.Cell;
-import game_of_life.utils.ClientCalculation;
+import game_of_life.models.*;
 import game_of_life.utils.Constants;
 import game_of_life.utils.GameOfLife;
 
@@ -26,7 +25,7 @@ public class Client implements Runnable {
             ois = new ObjectInputStream(socket.getInputStream());
             oos = new ObjectOutputStream(socket.getOutputStream());
             while (socket.isConnected()) {
-                ClientCalculation batch = (ClientCalculation) ois.readObject();
+                PacketBatch batch = (PacketBatch) ois.readObject();
                 gof = new GameOfLife(batch.getEndCol(), batch.getEndRow());
                 ArrayList<ArrayList<Cell>> newCells = gof.compute(batch.getCellBatch());
                 batch.setCellBatch(newCells);
