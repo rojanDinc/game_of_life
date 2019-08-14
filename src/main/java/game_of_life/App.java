@@ -3,12 +3,9 @@
  */
 package game_of_life;
 
-import java.net.ServerSocket;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 import game_of_life.models.Cell;
 import game_of_life.network.Client;
@@ -26,38 +23,33 @@ import javafx.stage.WindowEvent;
 
 public class App extends Application {
 
-    private static final int amount = 768;
     private ArrayList<ArrayList<Cell>> cells = new ArrayList<ArrayList<Cell>>();
-    private GameOfLife gol;
     private AppController controller;
     private Server server;
 
     @Override
     public void start(Stage primaryStage) throws Exception {
         controller = new AppController();
-        gol = new GameOfLife();
         initCells();
         AnimationTimer timer = new AnimationTimer() {
             private long lastUpdate = 0;
 
             @Override
             public void handle(long now) {
-                // if (now - lastUpdate >= Constants.TIMEOUT) {
-                // cells = gol.compute(cells);
-                // controller.display(cells);
-                // lastUpdate = now;
-                // }
-                if (server != null && server.getClientCount() > 0) {
-                    try {
-                        controller.setClientsLbl(server.getClientCount());
-                        cells = server.calculate(cells);
-                        if (cells.get(0).get(0) != null)
+                if (now - lastUpdate >= Constants.TIMEOUT) {
+                    if (server != null && server.getClientCount() > 0) {
+                        try {
+                            controller.setClientsLbl(server.getClientCount());
+                            cells = server.calculate(cells);
                             controller.display(cells);
-                    } catch (Exception e) {
-                        // TODO Auto-generated catch block
-                        e.printStackTrace();
+                        } catch (Exception e) {
+                            // TODO Auto-generated catch block
+                            e.printStackTrace();
+                        }
                     }
+                    lastUpdate = now;
                 }
+
             }
         };
         controller.startBtn.setOnAction((event) -> {
@@ -78,14 +70,19 @@ public class App extends Application {
             controller.startBtn.setDisable(true);
             timer.start();
         });
+        controller.addClientBtn.setOnAction((event) -> {
+            new Thread(new Client()).start();
+        });
 
         // Network
         server = new Server();
         new Thread(server).start();
         List<Thread> clients = new ArrayList<Thread>();
-        final int noClients = 1;
+        final int noClients = 2;
         for (int i = 0; i < noClients; i++) {
-            clients.add(new Thread(new Client()));
+            Thread t = new Thread(new Client());
+            t.setName("client socket thread: " + (i));
+            clients.add(t);
         }
         clients.forEach(c -> c.start());
         controller.setClientsLbl(server.getClientCount());
