@@ -31,9 +31,14 @@
                      <HBox layoutY="166.0" prefHeight="24.0" prefWidth="301.0" spacing="10.0">
                         <children>
                            <Button fx:id="startBtn" mnemonicParsing="false" text="Start" />
-                           <Button fx:id="pauseBtn" disable="true" mnemonicParsing="false" text="Pause" />
+                           <!-- <Button fx:id="pauseBtn" disable="true" mnemonicParsing="false" text="Pause" /> -->
                            <Button fx:id="restartBtn" disable="false" mnemonicParsing="false" text="Restart" />
                            <Button fx:id="stopBtn" disable="true" mnemonicParsing="false" text="Stop" />
+                        </children>
+                     </HBox>
+                     <HBox layoutY="180.0" prefHeight="24.0" prefWidth="301.0" spacing="10.0">
+                        <children>
+                           <Button fx:id="addClientBtn" mnemonicParsing="false" text="Add client" />
                         </children>
                      </HBox>
                      <Label text="Clients connected:" />
