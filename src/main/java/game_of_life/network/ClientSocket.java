@@ -9,14 +9,31 @@ import java.net.Socket;
  */
 public class ClientSocket {
 
-    Socket socket;
-    ObjectOutputStream oos;
-    ObjectInputStream ois;
+    private Socket socket;
+    private ObjectOutputStream oos;
+    private ObjectInputStream ois;
 
-    public ClientSocket(Socket socket, ObjectOutputStream oos, ObjectInputStream ois) {
-        this.socket = socket;
-        this.oos = oos;
-        this.ois = ois;
+    public ClientSocket(Socket socket) {
+        try {
+            this.socket = socket;
+            oos = new ObjectOutputStream(socket.getOutputStream());
+            ois = new ObjectInputStream(socket.getInputStream());
+        } catch (Exception e) {
+            // TODO: handle exception
+            e.printStackTrace();
+        }
+    }
+
+    public ObjectOutputStream getOos() {
+        return oos;
+    }
+
+    public ObjectInputStream getOis() {
+        return ois;
+    }
+
+    public Socket getSocket() {
+        return socket;
     }
 
 }
