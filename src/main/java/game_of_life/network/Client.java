@@ -19,6 +19,9 @@ public class Client implements Runnable {
     private ObjectOutputStream oos;
     private Game game;
 
+    /**
+     * Runs the client calculation loop.
+     */
     @Override
     public void run() {
         try {
@@ -32,7 +35,6 @@ public class Client implements Runnable {
                 oos.writeObject(batch);
             }
         } catch (Exception e) {
-            // TODO: handle exception
             e.printStackTrace();
         } finally {
             try {
@@ -40,12 +42,14 @@ public class Client implements Runnable {
                 oos.close();
                 socket.close();
             } catch (Exception e) {
-                // TODO: handle exception
                 e.printStackTrace();
             }
         }
     }
 
+    /**
+     * Initializes connection with server.
+     */
     public Client() {
         try {
             socket = new Socket(InetAddress.getLocalHost(), Constants.PORT);

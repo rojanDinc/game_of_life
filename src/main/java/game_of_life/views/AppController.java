@@ -31,6 +31,12 @@ public class AppController extends Pane {
     private static final int size = 20;
     private ArrayList<ArrayList<Rectangle>> rects = new ArrayList<ArrayList<Rectangle>>();
 
+    /**
+     * <p>
+     * Initializes the GUI by loading a fxml file and mapping the components to
+     * variables. Also the initialization of UI rectangles are done.
+     * </p>
+     */
     public AppController() {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/window.fxml"));
         fxmlLoader.setRoot(this);
@@ -69,7 +75,11 @@ public class AppController extends Pane {
         return grid;
     }
 
-    // Update the UI
+    /**
+     * Paints the UI with provided cells.
+     * 
+     * @param cells
+     */
     public void display(ArrayList<ArrayList<Cell>> cells) {
         Random rand = new Random();
         Platform.runLater(() -> {

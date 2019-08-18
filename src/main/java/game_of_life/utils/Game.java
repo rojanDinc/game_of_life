@@ -11,9 +11,6 @@ public class Game {
     private int cols = Constants.COLS;
     private int rows = Constants.ROWS;
 
-    /**
-     * Empty Contstructor
-     */
     public Game() {
     }
 
@@ -28,6 +25,12 @@ public class Game {
         this.rows = rows;
     }
 
+    /**
+     * This method calculates the next evolution of cells.
+     * 
+     * @param cells old cells to calculate on
+     * @return
+     */
     public ArrayList<ArrayList<Cell>> compute(ArrayList<ArrayList<Cell>> cells) {
         ArrayList<ArrayList<Cell>> next = initList();
         for (int i = 0; i < next.size(); i++) {
@@ -39,7 +42,7 @@ public class Game {
                 // Rules
                 /**
                  * 1. Any live cell with fewer than two live neighbors dies, as if by
-                 * underpopulation.
+                 * underpopulated.
                  */
                 if (state.getState() == 1 && neighbors.getState() < 2) {
                     next.get(i).get(j).setState(0);
@@ -73,14 +76,14 @@ public class Game {
 
     /**
      * <p>
-     * Get the current cells position to calculate the cells neighbours and return a
-     * new cell with a new state depending on its current neighbours and replace
-     * this with the initial cell.
+     * Get the current cells position to calculate the cells neighbors and return a
+     * new cell with a new state depending on its current neighbors and replace this
+     * with the initial cell.
      * </p>
      * 
      * @param cells 2D ArrayList with the current cells
-     * @param x     x position to count neighbours from
-     * @param y     y position to count neighbours from
+     * @param x     x position to count neighbors from
+     * @param y     y position to count neighbors from
      * @return a new cell with a new state
      */
     private Cell countNeighbors(ArrayList<ArrayList<Cell>> cells, int x, int y) {

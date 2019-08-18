@@ -6,6 +6,11 @@ public class Cell implements Serializable {
     final static long serialVersionUID = 327984L;
     private int state;
 
+    /**
+     * Cell constructor which takes in a initial state.
+     * 
+     * @param state initial state
+     */
     public Cell(int state) {
         this.state = state;
     }

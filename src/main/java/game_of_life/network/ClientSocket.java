@@ -12,6 +12,11 @@ public class ClientSocket {
     private ObjectOutputStream oos;
     private ObjectInputStream ois;
 
+    /**
+     * Initializes Output and Input streams.
+     * 
+     * @param socket connected socket.
+     */
     public ClientSocket(Socket socket) {
         try {
             oos = new ObjectOutputStream(socket.getOutputStream());
@@ -22,10 +27,20 @@ public class ClientSocket {
         }
     }
 
+    /**
+     * Returns the output stream
+     * 
+     * @return output stream
+     */
     public ObjectOutputStream getOos() {
         return oos;
     }
 
+    /**
+     * Returns the input stream
+     * 
+     * @return input stream
+     */
     public ObjectInputStream getOis() {
         return ois;
     }

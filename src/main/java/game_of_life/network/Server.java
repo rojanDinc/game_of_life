@@ -21,6 +21,9 @@ public class Server implements Runnable {
     private int clientCount = 0;
     private ExecutorService service;
 
+    /**
+     * Initializes a server socket.
+     */
     public Server() {
         try {
             serverSocket = new ServerSocket(Constants.PORT);
@@ -45,10 +48,27 @@ public class Server implements Runnable {
         }
     }
 
+    /**
+     * Returns the total amount of clients connected.
+     * 
+     * @return total clients connected
+     */
     public synchronized int getClientCount() {
         return this.clientCount;
     }
 
+    /**
+     * <p>
+     * This method is the "main" logic of the server. The whole client-server
+     * interaction flow happens here. This method is responsible for getting cells
+     * and split these cells into chunks which then are sent to clients and the
+     * returns the final result.
+     * </p>
+     * 
+     * @param cells cells to distribute to clients
+     * @return calculated cells
+     * @throws Exception
+     */
     public synchronized ArrayList<ArrayList<Cell>> calculate(ArrayList<ArrayList<Cell>> cells) throws Exception {
         // 1. Get all cells
         final int totClients = getClientCount();
@@ -98,12 +118,28 @@ public class Server implements Runnable {
         return to2DArrayList(lists);
     }
 
+    /**
+     * Helper method to convert a two dimensional List into a two dimensional
+     * ArrayList
+     * 
+     * @param <T>
+     * @param twoDimenArr
+     * @return two dimensional ArrayList
+     */
     private <T> ArrayList<ArrayList<T>> to2DArrayList(List<ArrayList<T>> twoDimenArr) {
         ArrayList<ArrayList<T>> results = new ArrayList<ArrayList<T>>();
         twoDimenArr.forEach(arr -> results.add(new ArrayList<T>(arr)));
         return results;
     }
 
+    /**
+     * <p>
+     * This class is used for delegating a task to a client thread. The data is
+     * passed on to this class which then is used for communication with a client
+     * and to return the result of the client calculation and the return that result
+     * to the server thread.
+     * </p>
+     */
     private class Task implements Callable<CellBatch> {
         private CellBatch cellBatch;
         private ClientSocket client;
@@ -121,6 +157,12 @@ public class Server implements Runnable {
             }
         }
 
+        /**
+         * Initialization of client socket and cellbatch
+         * 
+         * @param client
+         * @param cellBatch
+         */
         public Task(ClientSocket client, CellBatch cellBatch) {
             this.client = client;
             this.cellBatch = cellBatch;
