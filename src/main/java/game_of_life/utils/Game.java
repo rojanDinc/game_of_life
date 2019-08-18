@@ -7,14 +7,14 @@ import java.util.stream.IntStream;
 /**
  * Game logic class
  */
-public class GameOfLife {
-    private int cols = 32;
-    private int rows = 24;
+public class Game {
+    private int cols = Constants.COLS;
+    private int rows = Constants.ROWS;
 
     /**
      * Empty Contstructor
      */
-    public GameOfLife() {
+    public Game() {
     }
 
     /**
@@ -23,7 +23,7 @@ public class GameOfLife {
      * @param cols amount of columns the display is initialized with
      * @param rows amount of rows the display is initialized with
      */
-    public GameOfLife(int cols, int rows) {
+    public Game(int cols, int rows) {
         this.cols = cols;
         this.rows = rows;
     }
@@ -98,7 +98,7 @@ public class GameOfLife {
      * 
      * @return the 2D ArrayList
      */
-    public ArrayList<ArrayList<Cell>> initList() {
+    private ArrayList<ArrayList<Cell>> initList() {
         ArrayList<ArrayList<Cell>> cells = new ArrayList<ArrayList<Cell>>();
         for (int i = 0; i < cols; i++) {
             ArrayList<Cell> newCells = new ArrayList<>();
