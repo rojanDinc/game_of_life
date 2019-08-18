@@ -28,7 +28,7 @@ public class AppController extends Pane {
     @FXML
     public Button startBtn, restartBtn, stopBtn, addClientBtn;
     // Rectangle size
-    static final int size = 20;
+    private static final int size = 20;
     private ArrayList<ArrayList<Rectangle>> rects = new ArrayList<ArrayList<Rectangle>>();
 
     public AppController() {
@@ -42,7 +42,17 @@ public class AppController extends Pane {
             System.err.println(e);
         }
 
-        initRects();
+        for (int i = 0; i < Constants.COLS; i++) {
+            ArrayList<Rectangle> temp_rects = new ArrayList<>();
+            for (int j = 0; j < Constants.ROWS; j++) {
+                Rectangle rectangle = new Rectangle(size, size, Color.YELLOW);
+                GridPane.setRowIndex(rectangle, i);
+                GridPane.setColumnIndex(rectangle, j);
+                temp_rects.add(rectangle);
+                grid.getChildren().addAll(rectangle);
+            }
+            rects.add(temp_rects);
+        }
     }
 
     /**
@@ -73,23 +83,5 @@ public class AppController extends Pane {
                 }
             }
         });
-    }
-
-    /**
-     * Initialize the two dimensional Rectangle array which is used for representing
-     * the cells on the GUI
-     */
-    private void initRects() {
-        for (int i = 0; i < Constants.COLS; i++) {
-            ArrayList<Rectangle> temp_rects = new ArrayList<>();
-            for (int j = 0; j < Constants.ROWS; j++) {
-                Rectangle rectangle = new Rectangle(size, size, Color.YELLOW);
-                GridPane.setRowIndex(rectangle, i);
-                GridPane.setColumnIndex(rectangle, j);
-                temp_rects.add(rectangle);
-                grid.getChildren().addAll(rectangle);
-            }
-            rects.add(temp_rects);
-        }
     }
 }
