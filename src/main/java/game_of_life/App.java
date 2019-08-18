@@ -11,7 +11,6 @@ import game_of_life.models.Cell;
 import game_of_life.network.Client;
 import game_of_life.network.Server;
 import game_of_life.utils.Constants;
-import game_of_life.utils.GameOfLife;
 import game_of_life.views.AppController;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;

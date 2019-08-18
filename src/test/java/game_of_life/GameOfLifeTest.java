@@ -6,7 +6,7 @@ package game_of_life;
 import org.junit.Test;
 
 import game_of_life.models.Cell;
-import game_of_life.utils.GameOfLife;
+import game_of_life.utils.Game;
 
 import java.util.ArrayList;
 
@@ -17,7 +17,7 @@ public class GameOfLifeTest {
   public void testBlockPattern() {
     int cols = 4;
     int rows = 4;
-    GameOfLife gol = new GameOfLife(cols, rows);
+    Game gol = new Game(cols, rows);
     ArrayList<ArrayList<Cell>> expected_cells = new ArrayList<ArrayList<Cell>>();
     // Init the expected_cells array with alive cells at: [1,1],[1,2],[2,1],[2,2]
     for (int i = 0; i < cols; i++) {
@@ -42,7 +42,7 @@ public class GameOfLifeTest {
   public void testTubPattern() {
     int cols = 5;
     int rows = 5;
-    GameOfLife gol = new GameOfLife(cols, rows);
+    Game gol = new Game(cols, rows);
     ArrayList<ArrayList<Cell>> expected_cells = new ArrayList<ArrayList<Cell>>();
     // Init the expected_cells array with alive cells at: [1,1],[1,2],[2,1],[2,2]
     for (int i = 0; i < cols; i++) {

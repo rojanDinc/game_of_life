@@ -9,13 +9,11 @@ import java.net.Socket;
  */
 public class ClientSocket {
 
-    private Socket socket;
     private ObjectOutputStream oos;
     private ObjectInputStream ois;
 
     public ClientSocket(Socket socket) {
         try {
-            this.socket = socket;
             oos = new ObjectOutputStream(socket.getOutputStream());
             ois = new ObjectInputStream(socket.getInputStream());
         } catch (Exception e) {
@@ -30,10 +28,6 @@ public class ClientSocket {
 
     public ObjectInputStream getOis() {
         return ois;
-    }
-
-    public Socket getSocket() {
-        return socket;
     }
 
 }

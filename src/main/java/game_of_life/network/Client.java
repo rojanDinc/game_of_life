@@ -8,7 +8,7 @@ import java.util.ArrayList;
 
 import game_of_life.models.*;
 import game_of_life.utils.Constants;
-import game_of_life.utils.GameOfLife;
+import game_of_life.utils.Game;
 
 /**
  * Client
@@ -17,7 +17,7 @@ public class Client implements Runnable {
     private Socket socket;
     private ObjectInputStream ois;
     private ObjectOutputStream oos;
-    private GameOfLife gof;
+    private Game game;
 
     @Override
     public void run() {
@@ -25,9 +25,9 @@ public class Client implements Runnable {
             ois = new ObjectInputStream(socket.getInputStream());
             oos = new ObjectOutputStream(socket.getOutputStream());
             while (socket.isConnected()) {
-                PacketBatch batch = (PacketBatch) ois.readObject();
-                gof = new GameOfLife(batch.getEndCol(), batch.getEndRow());
-                ArrayList<ArrayList<Cell>> newCells = gof.compute(batch.getCellBatch());
+                CellBatch batch = (CellBatch) ois.readObject();
+                game = new Game(batch.getEndCol(), batch.getEndRow());
+                ArrayList<ArrayList<Cell>> newCells = game.compute(batch.getCellBatch());
                 batch.setCellBatch(newCells);
                 oos.writeObject(batch);
             }
