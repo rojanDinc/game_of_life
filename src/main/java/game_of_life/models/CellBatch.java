@@ -8,13 +8,13 @@ import game_of_life.models.Cell;
 /**
  * ClientInstruction
  */
-public class PacketBatch implements Serializable {
+public class CellBatch implements Serializable {
     private static final long serialVersionUID = 1L;
     private int startCol, endCol;
     private int startRow, endRow;
     private ArrayList<ArrayList<Cell>> cellBatch;
 
-    public PacketBatch(int startCol, int endCol, int startRow, int endRow, ArrayList<ArrayList<Cell>> cellBatch) {
+    public CellBatch(int startCol, int endCol, int startRow, int endRow, ArrayList<ArrayList<Cell>> cellBatch) {
         this.startCol = startCol;
         this.endCol = endCol;
         this.startRow = startRow;
