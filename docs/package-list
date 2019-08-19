@@ -1,0 +1,5 @@
+game_of_life
+game_of_life.models
+game_of_life.network
+game_of_life.utils
+game_of_life.views

@@ -62,7 +62,7 @@ public class AppView extends Pane {
     }
 
     /**
-     * @param clientsLbl the Label to set
+     * @param number the Label to set
      */
     public void setClientsLbl(int number) {
         this.clientsLbl.setText(Integer.toString(number));
@@ -78,7 +78,7 @@ public class AppView extends Pane {
     /**
      * Paints the UI with provided cells.
      * 
-     * @param cells
+     * @param cells cells to display
      */
     public void display(ArrayList<ArrayList<Cell>> cells) {
         Random rand = new Random();

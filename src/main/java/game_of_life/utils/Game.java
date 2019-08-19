@@ -29,7 +29,7 @@ public class Game {
      * This method calculates the next evolution of cells.
      * 
      * @param cells old cells to calculate on
-     * @return
+     * @return new list of calculated cells
      */
     public ArrayList<ArrayList<Cell>> compute(ArrayList<ArrayList<Cell>> cells) {
         ArrayList<ArrayList<Cell>> next = initList();

@@ -32,6 +32,11 @@ dependencies {
 
 
 }
+javadoc {
+  classpath += sourceSets.main.compileClasspath
+  source += sourceSets.main.allJava
+}
+
 
 // Define the main class for the application
 mainClassName = 'game_of_life.App'
