@@ -53,6 +53,7 @@ public class App extends Application {
         };
         controller.startBtn.setOnAction((event) -> {
             timer.start();
+            controller.addClientBtn.setDisable(false);
             controller.stopBtn.setDisable(false);
             controller.startBtn.setDisable(true);
         });
@@ -84,7 +85,7 @@ public class App extends Application {
             clients.add(t);
         }
         clients.forEach(c -> c.start());
-        controller.setClientsLbl(server.getClientCount());
+        controller.setClientsLbl(clients.size());
         // Clean up resources on exit
         primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
             @Override

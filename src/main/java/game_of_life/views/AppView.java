@@ -47,7 +47,7 @@ public class AppView extends Pane {
         } catch (Exception e) {
             System.err.println(e);
         }
-
+        addClientBtn.setDisable(true);
         for (int i = 0; i < Constants.COLS; i++) {
             ArrayList<Rectangle> temp_rects = new ArrayList<>();
             for (int j = 0; j < Constants.ROWS; j++) {
