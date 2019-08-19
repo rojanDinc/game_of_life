@@ -11,7 +11,7 @@ import game_of_life.models.Cell;
 import game_of_life.network.Client;
 import game_of_life.network.Server;
 import game_of_life.utils.Constants;
-import game_of_life.views.AppController;
+import game_of_life.views.AppView;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -23,12 +23,12 @@ import javafx.stage.WindowEvent;
 public class App extends Application {
 
     private ArrayList<ArrayList<Cell>> cells = new ArrayList<ArrayList<Cell>>();
-    private AppController controller;
+    private AppView controller;
     private Server server;
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        controller = new AppController();
+        controller = new AppView();
         initCells();
         AnimationTimer timer = new AnimationTimer() {
             private long lastUpdate = 0;
