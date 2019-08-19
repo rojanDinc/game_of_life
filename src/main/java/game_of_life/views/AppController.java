@@ -18,7 +18,7 @@ import javafx.scene.shape.Rectangle;
 /**
  * AppController
  */
-public class AppView extends Pane {
+public class AppController extends Pane {
     @FXML
     private Pane mainPane, controlPanel;
     @FXML
@@ -37,7 +37,7 @@ public class AppView extends Pane {
      * variables. Also the initialization of UI rectangles are done.
      * </p>
      */
-    public AppView() {
+    public AppController() {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/window.fxml"));
         fxmlLoader.setRoot(this);
         fxmlLoader.setController(this);
